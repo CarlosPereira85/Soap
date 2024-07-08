@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // Ensure session is started
 
 include_once 'includes/PDOConnection.inc.php';
 
@@ -25,14 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($userData && password_verify($pwd, $userData['password'])) {
         $_SESSION['login'] = $user;
 
-        // Redirect to SOAPNewZitate page after successful login
-        header('Location: SoapNewZitat.php');
+        // Redirect to main page after successful login
+        header('Location: /includes/main.inc.php'); // Use absolute path
         exit;
     } else {
         $meldung = 'Benutzername und/oder Passwort sind falsch.<br>Eingabe wiederholen!';
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -43,39 +42,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 </head>
 <body>
-<h1><?= $name; ?></h1>
+    <?php include_once 'includes/header.inc.php'; ?>
+    <h1><?= $name; ?></h1>
 
-<?php if (!$isLogin) { ?>
+    <?php if (!$isLogin) { ?>
 
-    <p><?= $meldung ?></p>
-    <p>Noch nicht registriert? <a href="register.php">Hier registrieren</a></p>
+        <p><?= $meldung ?></p>
+        <p>Noch nicht registriert? <a href="register.php">Hier registrieren</a></p>
 
-    <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
+        <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
 
-        <label for="user">Benutzername:</label><br>
-        <input type="text" name="user" id="user" value="<?= htmlspecialchars($user); ?>">
-        <br><br>
+            <label for="user">Benutzername:</label><br>
+            <input type="text" name="user" id="user" value="<?= htmlspecialchars($user); ?>">
+            <br><br>
 
-        <label for="pwd">Passwort:</label><br>
-        <input type="password" name="pwd" id="pwd" value="<?= htmlspecialchars($pwd); ?>">
-        <br><br>
+            <label for="pwd">Passwort:</label><br>
+            <input type="password" name="pwd" id="pwd" value="<?= htmlspecialchars($pwd); ?>">
+            <br><br>
 
-        <input type="submit" value="Anmelden">
-    </form>
+            <input type="submit" value="Anmelden">
+        </form>
 
-<?php } else { ?>
+    <?php } else { ?>
 
-    <p>
-        <?= "Hallo '<b>$isLogin</b>' du bist angemeldet!" ?>
-    </p>
+        <p>
+            <?= "Hallo '<b>$isLogin</b>' du bist angemeldet!" ?>
+        </p>
 
-    
-
-<?php } ?>
-
-<!-- <p style="text-align: right; background: #ccc; padding: 0.5em">
-    <?php echo number_format(microtime(true) - $starttime, 7, ',') ?> sec
-</p> -->
+    <?php } ?>
 
 </body>
 </html>
